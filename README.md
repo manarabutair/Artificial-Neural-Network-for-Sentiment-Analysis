@@ -1,37 +1,60 @@
-LSTM SENTIMENTAL ANALYSIS DOC
-Phase 1: Data preparing:
-Several necessary libraries have been imported in order to prepare the data appropriately, namely: pandas, numpy, 
-regex, string, and some nltk methods: stopwords, lemmatizer, and tokenizer.
-A dictionary is first created to handle different casual abbreviations; its primary purpose is to extract the abbreviated 
-meanings behind the slang. This dictionary is called ‘slang_dict’.
-First, the lemmatizer and a set made up of stop words are initialized. The lemmatizer will be used to return words to 
-their roots; to simplify classification and reduce the vocabulary size. The set of stop words is necessary to remove the many stop 
-words that exist inside the corpus.
-Second, two regular expressions are initialized; one for removing URLs, the other for removing suspiciously placed 
-HTML tags.
-The process of tokenizing the corpus begins by first removing any URLs, then removing the HTML tags. The text is 
-then lowered to so the model doesn’t treat the same words differently. Finally, punctuation marks are removed; because they 
-don’t make as much of an impact in casual text as they in formal text.
-By using the CountVectorizer, we can extrapolate the size of the vocab, that being 100k. We organize the input and label data on a 
-Panda’s dataframe in order to split into training and testing data.
-Phase 2: Vectorization:
-We use keras’ tokenizer to vectorize the string data and turn it into numeric vectors. In order to avoid further errors, we 
-use the pad_sequences function to give all numeric sequences the same length.
-Phase 3: Building the Model:
-We initialize a Sequential object to begin creating layers within the model. First is the embedding model, which is 
-created to receive and operate in embedded data; the data we’ve embedded beforehand. Then, we create the LSTM layer, which 
-is the layer that memorizes the effect of several tokens on the result; it’s the most important one. Thirdly, the dropout layer, this 
-layer is here to prevent any overfitting within the model. Finally, we add a final dense layer with a single node; this node will 
-output the final result of the network, it’s the classification of the inputted data.
-Phase 4: Hyperparameter Tuning & Fitting the Model:
-Before compiling the NN, we must first find an appropriate set of parameters for the network’s layers. We use 
-keras_tuner to randomly change the parameters within a defined range for each one. It’ll only go through 5 different iterations of 
-different parameters, with each iteration run with 2 epochs. The objective of the hyper-tuning is to maximize the accuracy.
-After we finish through all iterations of the different hyperparameters, we see that the third trial provided the best 
-accuracy, albeit the difference is extremely small. The issue here seems to be beyond the NN model itself, and might be because 
-of failure in preparing or embedding the data properly.
-We compile the NN using the best hyper-parameters available: Learning rate is set at 0.002, the LSTM layer has 160 
-nodes, the dropout layer’s hyperparameter etc…
-The loss is calculated with ‘binary_crossentropy’ because the model itself is essentially a binary classifier.
-We fit the compiled model on the training data and setup checkpoints at each epoch in case of some techhnical failure. 
-The model’s accuracy is at a disappointing 54%, which again, is most likely because of improper data handling
+LSTM Sentiment Analysis Documentation
+Phase 1: Data Preparation
+Several necessary libraries have been imported to prepare the data appropriately, including:
+
+pandas
+numpy
+regex
+string
+nltk methods: stopwords, lemmatizer, and tokenizer
+Steps:
+Slang Dictionary: A dictionary called slang_dict is created to handle different casual abbreviations, extracting the abbreviated meanings behind the slang.
+Lemmatizer and Stop Words:
+The lemmatizer returns words to their roots to simplify classification and reduce vocabulary size.
+A set of stop words is initialized to remove common stop words from the corpus.
+Regular Expressions:
+One regular expression removes URLs.
+Another removes suspiciously placed HTML tags.
+Tokenizing the Corpus:
+URLs and HTML tags are removed.
+Text is converted to lowercase to ensure uniformity.
+Punctuation marks are removed as they have less impact in casual text.
+CountVectorizer:
+Used to determine the vocabulary size, approximately 100k.
+Data Organization:
+Input and label data are organized into a pandas DataFrame.
+The data is split into training and testing sets.
+Phase 2: Vectorization
+Steps:
+Tokenization:
+Keras' tokenizer is used to convert string data into numeric vectors.
+Padding Sequences:
+pad_sequences function ensures all numeric sequences have the same length to avoid errors.
+Phase 3: Building the Model
+Steps:
+Sequential Object Initialization:
+Begins the process of creating layers within the model.
+Embedding Layer:
+Receives and operates on embedded data.
+LSTM Layer:
+Memorizes the effect of several tokens on the result; the most important layer.
+Dropout Layer:
+Prevents overfitting within the model.
+Dense Layer:
+A final dense layer with a single node outputs the classification of the input data.
+Phase 4: Hyperparameter Tuning & Fitting the Model
+Steps:
+Hyperparameter Tuning:
+Using keras_tuner, parameters for the network’s layers are randomly changed within a defined range.
+The tuner goes through 5 different iterations, each with 2 epochs, aiming to maximize accuracy.
+The third trial provides the best accuracy, although the improvement is minimal, indicating potential issues in data preparation or embedding.
+Model Compilation:
+Compiled using the best hyperparameters:
+Learning rate: 0.002
+LSTM layer nodes: 160
+Dropout layer hyperparameters, etc.
+Loss calculated with binary_crossentropy since the model is a binary classifier.
+Model Fitting:
+The compiled model is fit on the training data.
+Checkpoints are set up at each epoch to handle potential technical failures.
+The model’s accuracy is 54%, likely due to improper data handling.
